@@ -1,11 +1,8 @@
-using System;
-using System.IO;
 using System.Text;
-using System.Linq;
 
 namespace Wpress
 {
-    public class Constants
+    public sealed class Constants
     {
         public const int HeaderSize = 4377;   // length of the header
         public const int FilenameSize = 255;  // maximum number of bytes allowed for filename

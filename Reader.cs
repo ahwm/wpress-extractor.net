@@ -1,13 +1,9 @@
-using System;
-using System.IO;
 using System.Text;
-using System.Runtime.InteropServices;
-using System.Linq;
 using Wpress;
 
 namespace WPress
 {
-    public class Reader : IDisposable
+    public sealed class Reader : IDisposable
     {
         private const char PATH_SEPARATOR_WIN = '\\';
         private const char PATH_SEPARATOR_UNIX = '/';
@@ -43,6 +39,7 @@ namespace WPress
 
         public byte[]? ExtractFile(string filename, string path)
         {
+            File!.Seek(0, SeekOrigin.Begin);
             // TODO: implement
             return null;
         }
@@ -113,7 +110,7 @@ namespace WPress
         private async Task<byte[]> GetHeaderBlock()
         {
             byte[] block = new byte[Constants.HeaderSize];
-            int bytesRead = await File!.ReadAsync(block, 0, Constants.HeaderSize);
+            int bytesRead = await File!.ReadAsync(block.AsMemory(0, Constants.HeaderSize));
 
             if (bytesRead != Constants.HeaderSize)
             {
@@ -153,7 +150,7 @@ namespace WPress
             return NumberOfFiles;
         }
 
-        private string TrimNullBytes(byte[] bytes)
+        private static string TrimNullBytes(byte[] bytes)
         {
             int nullIndex = Array.IndexOf(bytes, (byte)0);
             return Encoding.UTF8.GetString(bytes, 0, nullIndex >= 0 ? nullIndex : bytes.Length);
