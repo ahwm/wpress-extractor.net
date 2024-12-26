@@ -3,20 +3,11 @@ using Wpress;
 
 namespace WPress
 {
-    public sealed class Reader : IDisposable
+    public sealed class Reader(string filename) : IDisposable
     {
-        private const char PATH_SEPARATOR_WIN = '\\';
-        private const char PATH_SEPARATOR_UNIX = '/';
-
-        public string Filename { get; private set; }
-        public FileStream? File { get; private set; }
-        public int NumberOfFiles { get; private set; }
-
-        internal Reader(string filename)
-        {
-            Filename = filename;
-            NumberOfFiles = 0;
-        }
+        private string Filename { get; set; } = filename;
+        private FileStream? File { get; set; }
+        private int NumberOfFiles { get; set; } = 0;
 
         public static Reader NewReader(string filename)
         {
